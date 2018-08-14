@@ -1,0 +1,13 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: slow
+provisioner: kubernetes.io/glusterfs
+parameters:
+  gidMax: "50000"
+  gidMin: "40000"
+  resturl: http://{{ groups['glusterfs_nodes'][0] }}:7777
+  volumetype: replicate:2
+  restauthenabled: "false"
+  allowVolumeExpansion: true
+

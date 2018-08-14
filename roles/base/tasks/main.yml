@@ -1,0 +1,91 @@
+---
+# tasks file for base
+- name: disable selinux in file
+  lineinfile:
+    path: /etc/selinux/config
+    regexp: '^SELINUX='
+    line: 'SELINUX=disabled'
+  when: inventory_hostname in groups['glusterfs_nodes'] and ansible_os_family == "RedHat"
+  tag: base
+
+- name: disable selinux in commond
+  shell: setenforce 0
+  ignore_errors: True
+  when: inventory_hostname in groups['glusterfs_nodes'] and ansible_os_family == "RedHat"
+  tag: base
+
+- name: stop and disable firewalld
+  service:
+    name: firewalld
+    state: stopped
+    enabled: no
+  when: inventory_hostname in groups['glusterfs_nodes'] and ansible_os_family == "RedHat"
+  tag: base
+
+- name: install glusterfs
+  shell: yum install -y centos-release-gluster310
+  when: inventory_hostname in groups['glusterfs_nodes'] and ansible_os_family == "RedHat"
+  tag: base
+
+
+- name: install glusterfs-server
+  yum:
+    name: glusterfs-server
+    state: present
+  when: inventory_hostname in groups['glusterfs_nodes'] and ansible_os_family == "RedHat"
+  tag: base
+
+- name: start glusterfs
+  systemd:
+    state: started
+    name: glusterd
+    enabled: yes
+  when: inventory_hostname in groups['glusterfs_nodes'] and ansible_os_family == "RedHat"
+  tag: base
+
+- name: yum wget
+  yum:
+    name: wget
+    state: present
+  when: inventory_hostname in groups['glusterfs_nodes'] and ansible_os_family == "RedHat"
+  tag: base
+
+- name: wget heketi rpm
+  shell: wget https://mirrors.aliyun.com/centos/7.5.1804/storage/x86_64/gluster-4.1/heketi-7.0.0-1.el7.x86_64.rpm
+  when: inventory_hostname in groups['glusterfs_nodes'][0] and ansible_os_family == "RedHat"
+  tag: base
+
+
+
+- name: wget heketi-client rpm
+  shell: wget https://mirrors.aliyun.com/centos/7.5.1804/storage/x86_64/gluster-4.1/heketi-client-7.0.0-1.el7.x86_64.rpm
+  when: inventory_hostname in groups['glusterfs_nodes'][0] and ansible_os_family == "RedHat"
+  tag: base
+
+- name: yum heketi rpm
+  shell: yum install -y  https://mirrors.aliyun.com/centos/7.5.1804/storage/x86_64/gluster-4.1/heketi-7.0.0-1.el7.x86_64.rpm
+  when: inventory_hostname in groups['glusterfs_nodes'][0] and ansible_os_family == "RedHat"
+  tag: base
+
+- name: yum heketi-clent rpm
+  shell: yum install -y https://mirrors.aliyun.com/centos/7.5.1804/storage/x86_64/gluster-4.1/heketi-client-7.0.0-1.el7.x86_64.rpm
+  when: inventory_hostname in groups['glusterfs_nodes'][0] and ansible_os_family == "RedHat"
+  tag: base
+    
+- name: copy heketi.json
+  copy: src=heketi.json dest=/etc/heketi/heketi.json mode=0644 owner=root group=root
+  when: inventory_hostname in groups['glusterfs_nodes'][0] and ansible_os_family == "RedHat"
+  tag: base
+
+- name: copy heketi.service
+  copy: src=heketi.service dest=/usr/lib/systemd/system/heketi.service  mode=0644 owner=root group=root
+  when: inventory_hostname in groups['glusterfs_nodes'][0] and ansible_os_family == "RedHat"
+  tag: base
+
+- name: start heketi
+  systemd:
+    state: started
+    name: heketi
+    enabled: yes
+  when: inventory_hostname in groups['glusterfs_nodes'][0] and ansible_os_family == "RedHat"
+  tag: base

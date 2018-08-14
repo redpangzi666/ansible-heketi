@@ -1,0 +1,14 @@
+---
+# tasks file for gluster
+- name: copy topology.json
+  template: src=topology.json.j2 dest=/tmp/topology.json owner=root group=root mode=0644
+  when: inventory_hostname in groups['glusterfs_nodes'][0] and ansible_os_family == "RedHat"
+  tags: glusterfs_nodes
+
+- name: load topology.json
+  shell: export HEKETI_CLI_SERVER=http://{{ item }}:7777 && heketi-cli topology load --json=/tmp/topology.json
+  with_items: "{{ groups['glusterfs_nodes'][0] }}"
+  when: inventory_hostname in groups['glusterfs_nodes'][0] and ansible_os_family == "RedHat"
+  tags: glusterfs_nodes
+
+

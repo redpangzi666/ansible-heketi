@@ -1,0 +1,19 @@
+---
+- hosts: glusterfs_nodes
+  roles:
+  - { role: base, tags: [ 'base' ] }
+
+- hosts: glusterfs_nodes 
+  remote_user: root
+  roles:
+    - { role: gluster, tags: [ 'glusterfs_nodes' ] }
+
+- hosts: all
+  remote_user: root
+  roles:
+    - { role: volume_extend, tags: [ 'extend_volume' ] }
+
+- hosts: all
+  remote_user: root
+  roles:
+    - { role: k8s_node, tags: [ 'k8s_node' ] }

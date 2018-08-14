@@ -1,0 +1,7 @@
+---
+# tasks file for volume_extend
+- name: extend_volume
+  shell: export HEKETI_CLI_SERVER=http://{{ item }}:7777 && heketi-cli volume expand --volume={{ volume_id }} --expand-size={{ expand_size }}
+  with_items: "{{ groups['glusterfs_nodes'][0] }}"
+  when: inventory_hostname in groups['glusterfs_nodes'][0] and ansible_os_family == "RedHat"
+  tags: extend_volume

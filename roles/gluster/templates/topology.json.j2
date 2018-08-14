@@ -1,0 +1,24 @@
+{
+  "clusters": [
+    {
+      "nodes": [
+{% for host in groups['glusterfs_nodes'] %}
+        {
+          "node": {
+            "hostnames": {
+              "manage": [
+                "{{ host }}"
+              ],
+              "storage": [
+                "{{ host }}"
+              ]
+            },
+            "zone": 1
+          },
+          "devices": {{ hostvars[host].disk.split(',')|to_json }}
+        }{% if not loop.last %},{% endif %}{% endfor %}
+      ]
+    }
+  ]
+}
+
