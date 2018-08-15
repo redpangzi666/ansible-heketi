@@ -17,3 +17,8 @@
   remote_user: root
   roles:
     - { role: k8s_node, tags: [ 'k8s_node' ] }
+
+- hosts: all
+  remote_user: root
+  roles:
+    - { role: brick_add, tags: [ 'brick_add' ] }
