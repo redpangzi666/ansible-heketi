@@ -1,7 +1,8 @@
 #!/bin/bash
 export HEKETI_CLI_SERVER=http://{{ groups['glusterfs_nodes'][0] }}:7777
-{% for host in groups['brick_add'] %}
-nodeid=`heketi-cli topology info|grep {{ host }} -B 4|grep Node| awk -F ":" '{print $2}'`
+for host in groups['brick_add']
+do
+nodeid=`heketi-cli topology info|grep $host -B 4|grep Node| awk -F ":" '{print $2}'`
 heketi-cli device add --name={{ hostvars[host].disk }}  --node=$nodeid
-{% endfor %}      
+done      
 

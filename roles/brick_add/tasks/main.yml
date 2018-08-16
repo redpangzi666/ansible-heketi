@@ -1,23 +1,25 @@
 ---
 # tasks file for node_add
-- name: node add
-  template: src=node_add.sh.j2 dest=/tmp/node_add.sh owner=root group=root mode=0755
+#- name: node add
+#  template: src=node_add.sh.j2 dest=/tmp/node_add.sh owner=root group=root mode=0755
+#  when: inventory_hostname in groups['glusterfs_nodes'][0] and ansible_os_family == "RedHat"
+#  tag: brick_add
+
+- name: add node
+  shell: export HEKETI_CLI_SERVER=http://{{ groups['glusterfs_nodes'][0] }}:7777 && clusterid=`heketi-cli topology info|grep Cluster|awk -F " " '{print $NF}'|head -1` && heketi-cli node add --zone=1 --cluster="$clusterid" --management-host-name={{ item }} --storage-host-name={{ item }}
+  with_items: "{{ groups['node_add'] }}"
+  ignore_errors: True
   when: inventory_hostname in groups['glusterfs_nodes'][0] and ansible_os_family == "RedHat"
   tag: brick_add
 
-- name: sh node.sh
-  shell: sh node_add.sh
-  when: inventory_hostname in groups['glusterfs_nodes'][0] and ansible_os_family == "RedHat"
-  tag: brick_add
 
-
-- name: brick add
-  template: src=brick_add.sh.j2 dest=/tmp/brick_add.sh owner=root group=root mode=0755
-  when: inventory_hostname in groups['glusterfs_nodes'][0] and ansible_os_family == "RedHat"
-  tag: brick_add
-
+#- name: brick add
+#  template: src=brick_add.sh.j2 dest=/tmp/brick_add.sh owner=root group=root mode=0755
+#  when: inventory_hostname in groups['glusterfs_nodes'][0] and ansible_os_family == "RedHat"
+#  tag: brick_add
+#
 - name: sh brick.sh
-  shell: sh brick_add.sh
+  shell: export HEKETI_CLI_SERVER=http://{{ groups['glusterfs_nodes'][0] }}:7777 && {% for host in groups['node_add'] %} nodeid=`heketi-cli topology info|grep {{ host }} -B 4|grep Node| awk -F " " '{print $NF}'` && heketi-cli device add --name={{ hostvars[host].disk }}  --node="$nodeid" {% endfor %}
   when: inventory_hostname in groups['glusterfs_nodes'][0] and ansible_os_family == "RedHat"
   tag: brick_add
 

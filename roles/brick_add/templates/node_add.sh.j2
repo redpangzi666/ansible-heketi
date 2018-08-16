@@ -1,7 +1,8 @@
 #!/bin/bash
 export HEKETI_CLI_SERVER=http://{{ groups['glusterfs_nodes'][0] }}:7777
-{% for host in groups['brick_add'] %}
-clusterid=`heketi-cli topology info|grep Cluster|awk -F ":" '{print $2}'` 
+clusterid=`heketi-cli topology info|grep Cluster|awk -F ":" '{print $2}'`
+
+{% for host in {{ groups['node_add'] }} %}
 heketi-cli node add --zone=1 --cluster=$clusterid --management-host-name={{ host }} --storage-host-name={{ host }}
 {% endfor %}
 
