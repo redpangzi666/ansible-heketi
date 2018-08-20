@@ -22,18 +22,6 @@
   when: inventory_hostname in groups['glusterfs_nodes'] and ansible_os_family == "RedHat"
   tag: base
 
-#- name: install glusterfs
-#  shell: yum install -y centos-release-gluster310
-#  when: inventory_hostname in groups['glusterfs_nodes'] and ansible_os_family == "RedHat"
-#  tag: base
-#
-#
-#- name: install glusterfs-server
-#  yum:
-#    name: glusterfs-server
-#    state: present
-#  when: inventory_hostname in groups['glusterfs_nodes'] and ansible_os_family == "RedHat"
-#  tag: base
 
 - name: copy base package to all node
   unarchive:
@@ -44,6 +32,7 @@
 
 - name: rpm base
   shell: rpm -Uvh /tmp/base/*.rpm
+  ignore_errors: True
   when: inventory_hostname in groups['glusterfs_nodes'] and ansible_os_family == "RedHat"
   tag: base
 

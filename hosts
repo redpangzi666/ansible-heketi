@@ -2,6 +2,7 @@
 10.100.24.53 disk="/dev/sdb","/dev/sdc"
 10.100.24.54 disk="/dev/sdb","/dev/sdc"
 10.100.24.56 disk="/dev/sdb"
+10.100.24.57 
 
 [k8s_node]
 10.100.24.61
@@ -11,7 +12,7 @@ volume_id=758c5e99932c614ca232a16ec16d07f1
 expand_size=1
 
 [node_add]
-10.100.24.56 disk=/dev/sdc
+10.100.24.57 disk="['/dev/sdb','/dev/sdc']"
 
 
 

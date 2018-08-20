@@ -13,18 +13,13 @@
   tag: brick_add
 
 
-- name: brick add
-  template: src=brick_add.sh.j2 dest=/tmp/brick_add.sh owner=root group=root mode=0755
-  when: inventory_hostname in groups['glusterfs_nodes'][0] and ansible_os_family == "RedHat"
-  tag: brick_add
-
-- name: sh brick.sh
-  shell: sh /tmp/brick_add.sh
-  when: inventory_hostname in groups['glusterfs_nodes'][0] and ansible_os_family == "RedHat"
-  tag: brick_add
-
-#- name: sh brick.sh
-#  shell: export HEKETI_CLI_SERVER=http://{{ groups['glusterfs_nodes'][0] }}:7777 && {% for host in groups['node_add'] %} nodeid=`heketi-cli topology info|grep {{ host }} -B 4|grep Node| awk -F " " '{print $NF}'` && heketi-cli device add --name={{ hostvars[host].disk }}  --node="$nodeid" {% endfor %}
+#- name: brick add
+#  template: src=brick_add.sh.j2 dest=/tmp/brick_add.sh owner=root group=root mode=0755
 #  when: inventory_hostname in groups['glusterfs_nodes'][0] and ansible_os_family == "RedHat"
 #  tag: brick_add
+#
+- name: sh brick.sh
+  shell: export HEKETI_CLI_SERVER=http://{{ groups['glusterfs_nodes'][0] }}:7777 && {% for host in groups['node_add'] %} nodeid=`heketi-cli topology info|grep {{ host }} -B 4|grep Node| awk -F " " '{print $NF}'` && heketi-cli device add --name={{ hostvars[host].disk }}  --node="$nodeid" {% endfor %}
+  when: inventory_hostname in groups['glusterfs_nodes'][0] and ansible_os_family == "RedHat"
+  tag: brick_add
 
