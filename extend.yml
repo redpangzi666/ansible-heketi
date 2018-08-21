@@ -1,0 +1,10 @@
+- hosts: all
+  remote_user: root
+  roles:
+    - { role: volume_extend, tags: [ 'extend_volume' ] }
+
+- hosts: all
+  remote_user: root
+  roles:
+    - { role: brick_add, tags: [ 'brick_add' ] }
+
