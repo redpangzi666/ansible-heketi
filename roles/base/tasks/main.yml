@@ -22,6 +22,12 @@
   when: inventory_hostname in groups['glusterfs_nodes'] and ansible_os_family == "RedHat"
   tag: base
 
+- name: Copy id_rsa to all node
+  copy:
+    src: /root/.ssh/id_rsa
+    dest: /root/.ssh/id_rsa
+    mode: 0600
+  ignore_errors: True
 
 - name: copy base package to all node
   unarchive:
