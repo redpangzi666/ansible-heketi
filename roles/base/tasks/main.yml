@@ -37,7 +37,7 @@
   tag: base
 
 - name: rpm base
-  shell: rpm -Uvh /tmp/base/*.rpm
+  shell: yum localinstall -y  /tmp/base/*.rpm
   ignore_errors: True
   when: inventory_hostname in groups['glusterfs_nodes'] and ansible_os_family == "RedHat"
   tag: base

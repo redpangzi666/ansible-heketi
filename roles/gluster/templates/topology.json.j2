@@ -15,7 +15,7 @@
             },
             "zone": 1
           },
-          "devices": {{ hostvars[host].disk.split(',')|to_json }}
+          "devices": {{ hostvars[host].disk|to_json }}
         }{% if not loop.last %},{% endif %}{% endfor %}
       ]
     }

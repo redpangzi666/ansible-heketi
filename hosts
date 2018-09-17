@@ -1,18 +1,16 @@
 [glusterfs_nodes]
-10.100.24.60 disk="/dev/sdb"
-10.100.24.61 disk="/dev/sdb"
-10.100.24.62 disk="/dev/sdb"
- 
+10.100.24.57 disk=['"/dev/sdb"','"/dev/sdc"']
+10.100.24.54 disk=['"/dev/sdb"']
 
 [k8s_node]
-10.100.24.61
+10.100.24.1
 
 [glusterfs_nodes:vars]
 volume_id=758c5e99932c614ca232a16ec16d07f1
 expand_size=1
 
 [node_add]
-10.100.24.57 disk="['/dev/sdb','/dev/sdc']"
+10.100.24.54 disk="['/dev/sdb']"
 
 
 
