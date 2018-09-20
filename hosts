@@ -1,5 +1,5 @@
 [glusterfs_nodes]
-10.100.26.17 disks=['"/dev/sdb"','"/dev/sdc"']
+10.100.26.17 disks=['"/dev/sdb","/dev/sdc"']
 10.100.26.18 disks=['"/dev/sdb"']
 
 
@@ -12,7 +12,7 @@ expand_size=1
 
 [node_add]
 10.100.26.17 disk=['"/dev/sdd"']
-10.100.26.18 disk=['"/dev/sdc"','"/dev/sdd"']
+10.100.26.18 disk=['"/dev/sdc","/dev/sdd"']
 
 
 

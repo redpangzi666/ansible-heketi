@@ -60,6 +60,7 @@
 
 - name: rpm heketi
   shell: rpm -Uvh /tmp/heketi/*.rpm
+  ignore_errors: True
   when: inventory_hostname in groups['glusterfs_nodes'][0] and ansible_os_family == "RedHat"
   tag: base
     
