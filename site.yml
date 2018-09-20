@@ -1,9 +1,9 @@
 ---
-- hosts: glusterfs_nodes
+- hosts: all
   roles:
   - { role: base, tags: [ 'base' ] }
 
-- hosts: glusterfs_nodes 
+- hosts: all
   remote_user: root
   roles:
     - { role: gluster, tags: [ 'glusterfs_nodes' ] }

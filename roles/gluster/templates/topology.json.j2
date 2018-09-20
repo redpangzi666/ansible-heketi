@@ -15,7 +15,7 @@
             },
             "zone": 1
           },
-          "devices": {{ hostvars[host].disk|to_json }}
+          "devices": {{ hostvars[host].disks|to_json }}
         }{% if not loop.last %},{% endif %}{% endfor %}
       ]
     }
