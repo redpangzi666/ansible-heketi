@@ -1,7 +1,7 @@
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: test
+  name: slow
 provisioner: kubernetes.io/glusterfs
 parameters:
   gidMax: "50000"
