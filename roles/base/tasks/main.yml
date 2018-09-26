@@ -51,14 +51,33 @@
   tag: base
 
 - name: check service
-  copy: src=check-service.sh dest=/tmp/check-service.sh owner=root group=root mode=755
+  copy: src=check-glusterd.sh dest=/tmp/check-glusterd.sh owner=root group=root mode=755
   when: inventory_hostname in groups['glusterfs_nodes'] and ansible_os_family == "RedHat"
   tag: base
 
 - name: sh check-service
-  shell: sh /tmp/check-service.sh
+  shell: sh /tmp/check-glusterd.sh
   when: inventory_hostname in groups['glusterfs_nodes'] and ansible_os_family == "RedHat"
   tag: base
+
+- name: start glusterfs
+  systemd:
+    state: started
+    name: glusterfsd
+    enabled: yes
+  when: inventory_hostname in groups['glusterfs_nodes'] and ansible_os_family == "RedHat"
+  tag: base
+
+- name: check service
+  copy: src=check-glusterfsd.sh dest=/tmp/check-glusterfsd.sh owner=root group=root mode=755
+  when: inventory_hostname in groups['glusterfs_nodes'] and ansible_os_family == "RedHat"
+  tag: base
+
+- name: sh check-service
+  shell: sh /tmp/check-glusterfsd.sh
+  when: inventory_hostname in groups['glusterfs_nodes'] and ansible_os_family == "RedHat"
+  tag: base
+
 - name: copy heketi package to heketi node
   unarchive:
     src: heketi.tar.gz
