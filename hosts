@@ -1,7 +1,6 @@
 [glusterfs_nodes]
-10.100.26.201 disks=['"/dev/sdd"']
-10.100.26.202 disks=['"/dev/sda"']
-
+10.100.24.56 disks=['"/dev/sdb"']
+10.100.24.57 disks=['"/dev/sdb","/dev/sdc"']
 
 [k8s_node]
 10.100.24.1

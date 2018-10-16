@@ -1,11 +1,11 @@
 ---
 # tasks file for k8s_node
-#- name: copy endpoint to k8s_node
-#  template: src=gluster_sc.yaml.j2 dest=/tmp/gluster_sc.yaml owner=root group=root mode=0655
-#  when: inventory_hostname in groups['k8s_node'] and ansible_os_family == "RedHat"
-#  tags: k8s_node
-#
-#- name: create gluster_sc
-#  shell: source /etc/profile && kubectl create -f /tmp/gluster_sc.yaml
-#  when: inventory_hostname in groups['k8s_node'] and ansible_os_family == "RedHat"
-#  tags: k8s_node
+- name: copy endpoint to k8s_node
+  template: src=gluster_sc.yaml.j2 dest=/tmp/gluster_sc.yaml owner=root group=root mode=0655
+  when: inventory_hostname in groups['k8s_node'] and ansible_os_family == "RedHat"
+  tags: k8s_node
+
+- name: create gluster_sc
+  shell: source /etc/profile && kubectl create -f /tmp/gluster_sc.yaml
+  when: inventory_hostname in groups['k8s_node'] and ansible_os_family == "RedHat"
+  tags: k8s_node
