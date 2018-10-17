@@ -6,6 +6,16 @@
   when: inventory_hostname in groups['glusterfs_nodes'][0] and ansible_os_family == "RedHat"
   tags: glusterfs_nodes
 
+- name: add path
+  blockinfile:
+    path: /etc/profile
+    block: |
+      export HEKETI_CLI_SERVER=http://{{ item }}:7777
+  with_items: "{{ groups['glusterfs_nodes'][0] }}"
+
+#- name: pvcreate disk
+#  shell: pvcreate -ff --metadatasize=128M --dataalignment=256k {{ disk }}
+
 - name: load topology.json
   shell: export HEKETI_CLI_SERVER=http://{{ item }}:7777 && heketi-cli topology load --json=/tmp/topology.json
   with_items: "{{ groups['glusterfs_nodes'][0] }}"

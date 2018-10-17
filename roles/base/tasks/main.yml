@@ -6,13 +6,11 @@
     regexp: '^SELINUX='
     line: 'SELINUX=disabled'
   when: inventory_hostname in groups['glusterfs_nodes'] and ansible_os_family == "RedHat"
-  tag: base
 
 - name: disable selinux in commond
   shell: setenforce 0
   ignore_errors: True
   when: inventory_hostname in groups['glusterfs_nodes'] and ansible_os_family == "RedHat"
-  tag: base
 
 - name: stop and disable firewalld
   service:
@@ -20,7 +18,6 @@
     state: stopped
     enabled: no
   when: inventory_hostname in groups['glusterfs_nodes'] and ansible_os_family == "RedHat"
-  tag: base
 
 - name: Copy id_rsa to all node
   copy:
@@ -34,13 +31,11 @@
     src: base.tar.gz
     dest: /tmp
   when: inventory_hostname in groups['glusterfs_nodes'] and ansible_os_family == "RedHat"
-  tag: base
 
 - name: rpm base
   shell: yum localinstall -y  /tmp/base/*.rpm
   ignore_errors: True
   when: inventory_hostname in groups['glusterfs_nodes'] and ansible_os_family == "RedHat"
-  tag: base
 
 - name: start glusterfs
   systemd:
@@ -48,17 +43,14 @@
     name: glusterd
     enabled: yes
   when: inventory_hostname in groups['glusterfs_nodes'] and ansible_os_family == "RedHat"
-  tag: base
 
 - name: check service
   copy: src=check-glusterd.sh dest=/tmp/check-glusterd.sh owner=root group=root mode=755
   when: inventory_hostname in groups['glusterfs_nodes'] and ansible_os_family == "RedHat"
-  tag: base
 
 - name: sh check-service
   shell: sh /tmp/check-glusterd.sh
   when: inventory_hostname in groups['glusterfs_nodes'] and ansible_os_family == "RedHat"
-  tag: base
 
 - name: start glusterfs
   systemd:
@@ -66,40 +58,33 @@
     name: glusterfsd
     enabled: yes
   when: inventory_hostname in groups['glusterfs_nodes'] and ansible_os_family == "RedHat"
-  tag: base
 
 - name: check service
   copy: src=check-glusterfsd.sh dest=/tmp/check-glusterfsd.sh owner=root group=root mode=755
   when: inventory_hostname in groups['glusterfs_nodes'] and ansible_os_family == "RedHat"
-  tag: base
 
 - name: sh check-service
   shell: sh /tmp/check-glusterfsd.sh
   when: inventory_hostname in groups['glusterfs_nodes'] and ansible_os_family == "RedHat"
-  tag: base
 
 - name: copy heketi package to heketi node
   unarchive:
     src: heketi.tar.gz
     dest: /tmp
   when: inventory_hostname in groups['glusterfs_nodes'][0] and ansible_os_family == "RedHat"
-  tag: base
 
 - name: rpm heketi
   shell: rpm -Uvh /tmp/heketi/*.rpm
   ignore_errors: True
   when: inventory_hostname in groups['glusterfs_nodes'][0] and ansible_os_family == "RedHat"
-  tag: base
     
 - name: copy heketi.json
   copy: src=heketi.json dest=/etc/heketi/heketi.json mode=0644 owner=root group=root
   when: inventory_hostname in groups['glusterfs_nodes'][0] and ansible_os_family == "RedHat"
-  tag: base
 
 - name: copy heketi.service
   copy: src=heketi.service dest=/usr/lib/systemd/system/heketi.service  mode=0644 owner=root group=root
   when: inventory_hostname in groups['glusterfs_nodes'][0] and ansible_os_family == "RedHat"
-  tag: base
 
 - name: start heketi
   systemd:
@@ -107,4 +92,3 @@
     name: heketi
     enabled: yes
   when: inventory_hostname in groups['glusterfs_nodes'][0] and ansible_os_family == "RedHat"
-  tag: base

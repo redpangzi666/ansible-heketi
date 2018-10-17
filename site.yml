@@ -1,16 +1,16 @@
 ---
 - hosts: all
   roles:
-  - { role: base, tags: [ 'base' ] }
+  - { role: base }
 
 - hosts: all
   remote_user: root
   roles:
-    - { role: gluster, tags: [ 'glusterfs_nodes' ] }
+    - { role: gluster }
 
 
 - hosts: all
   remote_user: root
   roles:
-    - { role: k8s_node, tags: [ 'k8s_node' ] }
+    - { role: k8s_node }
 
